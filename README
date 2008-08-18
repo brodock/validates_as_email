@@ -32,7 +32,6 @@ config.gem 'gbdev-validates_as_email', :version => '>=0.5.0', :lib => 'validates
 
 Usage:
 ======
-
 In your model file do something like:
 
 class MyClass < ActiveRecord::Base
@@ -41,7 +40,6 @@ end
 
 Tests:
 ======
-
 Some tests have been added.
 
 License:

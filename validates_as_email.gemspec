@@ -1,7 +1,7 @@
 Gem::Specification.new do |s|
   
   s.name    = 'validates_as_email'
-  s.version = '0.5.0'
+  s.version = '0.5.1'
   s.date    = '2008-08-15'
   
   s.summary     = 'Rails gem/plugin to validate format of email addresses (RFC822)'
