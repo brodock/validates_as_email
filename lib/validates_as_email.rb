@@ -1,3 +1,5 @@
+# encoding: utf-8
+
 #
 # RFC822 Email Address Regex
 # --------------------------
@@ -11,22 +13,30 @@
 # http://creativecommons.org/licenses/by-sa/2.5/
 #
 module RFC822
-  EmailAddress = begin
-    qtext = '[^\\x0d\\x22\\x5c\\x80-\\xff]'
-    dtext = '[^\\x0d\\x5b-\\x5d\\x80-\\xff]'
-    atom = '[^\\x00-\\x20\\x22\\x28\\x29\\x2c\\x2e\\x3a-' +
-      '\\x3c\\x3e\\x40\\x5b-\\x5d\\x7f-\\xff]+'
-    quoted_pair = '\\x5c[\\x00-\\x7f]'
-    domain_literal = "\\x5b(?:#{dtext}|#{quoted_pair})*\\x5d"
-    quoted_string = "\\x22(?:#{qtext}|#{quoted_pair})*\\x22"
-    domain_ref = atom
-    sub_domain = "(?:#{domain_ref}|#{domain_literal})"
-    word = "(?:#{atom}|#{quoted_string})"
-    domain = "#{sub_domain}(?:\\x2e#{sub_domain})*"
-    local_part = "#{word}(?:\\x2e#{word})*"
-    addr_spec = "#{local_part}\\x40#{domain}"
-    pattern = /\A#{addr_spec}\z/
+  module Patterns
+    def self.compile(string)
+      Regexp.new string, nil, 'n'
+    end
+
+    QTEXT     = compile "[^\\x0d\\x22\\x5c\\x80-\\xff]"
+    DTEXT     = compile "[^\\x0d\\x5b-\\x5d\\x80-\\xff]"
+
+    ATOM_CORE = compile "[^\\x00-\\x20\\x22\\x28\\x29\\x2c\\x2e\\x3a-\\x3c\\x3e\\x40\\x5b-\\x5d\\x7f-\\xff]+"
+    ATOM_EDGE = compile "[^\\x00-\\x20\\x22\\x28\\x29\\x2c-\\x2e\\x3a-\\x3c\\x3e\\x40\\x5b-\\x5d\\x7f-\\xff]"
+    ATOM      = compile "(?:#{ATOM_EDGE}{1,2}|#{ATOM_EDGE}#{ATOM_CORE}#{ATOM_EDGE})"
+
+    QPAIR     = compile "\\x5c[\\x00-\\x7f]"
+    QSTRING   = compile "\\x22(?:#{QTEXT}|#{QPAIR})*\\x22"
+
+    WORD      = compile "(?:#{ATOM}|#{QSTRING})"
+
+    DOMAIN_PT = compile "(?:[a-zA-Z0-9][\-a-zA-Z0-9]*[a-zA-Z0-9]|[a-zA-Z0-9]+)"
+
+    DOMAIN    = compile "#{DOMAIN_PT}(?:\\x2e#{DOMAIN_PT})*"
+    LOCAL_PT  = compile "#{WORD}(?:\\x2e#{WORD})*"
+    ADDRESS   = compile "#{LOCAL_PT}\\x40#{DOMAIN}"
   end
+  EmailAddress = /\A#{Patterns::ADDRESS}\z/
 end
 
 # Validation helper for ActiveRecord derived objects that cleanly and simply
@@ -47,9 +57,9 @@ module ActiveRecord
     module ClassMethods
       def validates_as_email(*attr_names)
         configuration = {
-          :message   => 'is an invalid email',
+          :message   => (I18n.translate(:'activerecord.errors.messages.invalid_email', :raise => true) rescue 'is an invalid email'),
           :with      => RFC822::EmailAddress,
-          :allow_nil => true }
+          :allow_nil => false }
         configuration.update(attr_names.pop) if attr_names.last.is_a?(Hash)
 
         validates_format_of attr_names, configuration
