@@ -1,3 +1,7 @@
+0.6.0 - Jul 24th 2009
+ * Compatibility with Ruby 1.9
+ * Support for I18n
+
 0.5.1 - Aug 15th 2008
  * Repackaged original plugin by Ximon Eighteen for GitHub
  * Gem'ified plugin
