@@ -27,7 +27,7 @@ Installation:
 gem sources -a http://gems.github.com
 
 Install the gem(s):
-sudo gem install xHire-validates_as_email
+sudo gem install donncha-validates_as_email
 
 Add to environment.rb initializer block:
 config.gem 'donncha-validates_as_email', :lib => 'validates_as_email', :source => 'http://gems.github.com'
