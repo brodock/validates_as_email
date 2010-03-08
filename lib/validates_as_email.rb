@@ -34,9 +34,12 @@ module RFC822
 
     DOMAIN    = compile "#{DOMAIN_PT}(?:\\x2e#{DOMAIN_PT})*"
     LOCAL_PT  = compile "#{WORD}(?:\\x2e#{WORD})*"
+
     ADDRESS   = compile "#{LOCAL_PT}\\x40#{DOMAIN}"
+    NON_LOCAL_ADDRESS   = compile "#{LOCAL_PT}\\x40#{DOMAIN_PT}(\\x2e#{DOMAIN_PT})+"
   end
   EmailAddress = /\A#{Patterns::ADDRESS}\z/
+  NonLocalEmailAddress = /\A#{Patterns::NON_LOCAL_ADDRESS}\z/
 end
 
 # Validation helper for ActiveRecord derived objects that cleanly and simply
@@ -56,11 +59,13 @@ module ActiveRecord
   module Validations
     module ClassMethods
       def validates_as_email(*attr_names)
+        options = attr_names.pop if attr_names.last.is_a?(Hash)
+        restrict_domain = options.delete(:restrict_domain) if options
         configuration = {
           :message   => (I18n.translate(:'activerecord.errors.messages.invalid_email', :raise => true) rescue 'is an invalid email'),
-          :with      => RFC822::EmailAddress,
+          :with      => restrict_domain ? RFC822::NonLocalEmailAddress : RFC822::EmailAddress,
           :allow_nil => false }
-        configuration.update(attr_names.pop) if attr_names.last.is_a?(Hash)
+        configuration.update(options) if options
 
         validates_format_of attr_names, configuration
       end
