@@ -1,5 +1,5 @@
 Gem::Specification.new do |s|
-  s.name    = 'validates_as_email'
+  s.name    = 'donncha-validates_as_email'
   s.version = '0.6.1'
   s.date    = '2010-03-08'
 
