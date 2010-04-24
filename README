@@ -3,6 +3,7 @@ ValidatesAsEmail
 
 This gem/plugin is a re-packaged and gem'ified version of the original plugin with credit as follows:
 
+Gabriel Mazetto <brodock@gmail.com>
 Donncha Redmond <dredmond@e-xact.com>
 Michal Zima <xhire@mujmalysvet.cz>
 Ximon Eighteen <ximon.eighteen@int.greenpeace.org>
@@ -11,26 +12,19 @@ Thijs van der Vossen <thijs@fngtps.com>
 
 This Ruby on Rails plugin implements an ActiveRecord validation helper called
 validates_as_email. The helper acts as if validates_format_of was used with a
-regular expression that defines an RFC822 email address conformance test.
+regular expression that defines an email address conformance test.
 
-The plugin implements the regular expression here:
-
-  http://tfletcher.com/lib/rfc822.rb
-
-Which is an implementation in Ruby of a regular expression published by Cal
-Henderson for PHP here:
-
-  http://www.iamcal.com/publish/articles/php/parsing_email
+It does not follow any RFC as RFC822, RFC2822, RFC3696 as it's intended for common bn
 
 Installation:
 =============
-gem sources -a http://gems.github.com
+Make sure you have rubygems >= 1.3.6
 
 Install the gem(s):
-sudo gem install donncha-validates_as_email
+sudo gem install brodock-validates_as_email
 
 Add to environment.rb initializer block:
-config.gem 'donncha-validates_as_email', :lib => 'validates_as_email', :source => 'http://gems.github.com'
+config.gem 'brodock-validates_as_email', :lib => 'validates_as_email'
 
 Usage:
 ======
