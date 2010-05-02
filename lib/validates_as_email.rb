@@ -26,6 +26,7 @@ module ActiveModel
       def validate_each(record, attribute, value)
         
         return if options[:allow_nil] && value.nil?
+        return if options[:allow_blank] && value.blank?
         
         unless value =~ /\A([^@\s]+)@((?:[-a-z0-9]+\.)+[a-z]{2,})\Z/i
           record.errors[attribute] << (options[:message])
@@ -35,6 +36,20 @@ module ActiveModel
     end
     
     module ClassMethods
+
+      # Validates that the specified attribute is a valid email address.
+      # 
+      # Configuration options:
+      # * <tt>:allow_nil</tt> - Attribute may be +nil+; skip validation.
+      # * <tt>:allow_blank</tt> - Attribute may be blank; skip validation.
+      # * <tt>:message</tt> - The error message to be displayed
+      # * <tt>:on</tt> - Specifies when this validation is active (default is <tt>:save</tt>, other options <tt>:create</tt>, <tt>:update</tt>).
+      # * <tt>:if</tt> - Specifies a method, proc or string to call to determine if the validation should
+      #   occur (e.g. <tt>:if => :allow_validation</tt>, or <tt>:if => Proc.new { |user| user.signup_step > 2 }</tt>).  The
+      #   method, proc or string should return or evaluate to a true or false value.
+      # * <tt>:unless</tt> - Specifies a method, proc or string to call to determine if the validation should
+      #   not occur (e.g. <tt>:unless => :skip_validation</tt>, or <tt>:unless => Proc.new { |user| user.signup_step <= 2 }</tt>).  The
+      #   method, proc or string should return or evaluate to a true or false value.
       def validates_as_email(*attr_names)
         validates_with EmailValidator, _merge_attributes(attr_names)
       end

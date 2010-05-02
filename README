@@ -36,7 +36,7 @@ end
 
 class MyOtherClass < ActiveRecord::Base
   # will not accept addresses with a single part domain, e.g user@example
-  validates_as_email :email, :message => 'Invalid Email Address', :allow_nil => true, :restrict_domain => true
+  validates_as_email :email, :message => 'Invalid Email Address', :allow_nil => true
 end
 
 Tests:

@@ -1,3 +1,6 @@
+0.7.1 - April 26th 2010
+ * Added support for allow_blank and documentation
+
 0.7.0 - April 24th 2010
  * Updated to support Sexy Validations on Rails 3
  * Requires Rails 3

@@ -1,7 +1,7 @@
 Gem::Specification.new do |s|
   s.name    = 'brodock-validates_as_email'
-  s.version = '0.7.0'
-  s.date    = '2010-04-24'
+  s.version = '0.7.2'
+  s.date    = '2010-05-02'
 
   s.summary     = 'Rails gem/plugin to validate format of email addresses (RFC822)'
   s.description = 'Rails gem/plugin that implements an ActiveRecord validation helper called validates_as_email which validates email address (RFC822)'
